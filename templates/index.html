@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f2f2f2;
+        }
+    
+        h2 {
+            color: #333333;
+            font-size: 24px;
+        }
+    
+        .progress-bar {
+            width: 300px;
+            height: 20px;
+            background-color: lightgray;
+            margin-bottom: 10px;
+        }
+    
+        .progress-bar-inner {
+            height: 100%;
+            background-color: green;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+    
+        .progress-bar-id {
+            font-weight: bold;
+            color: #333333;
+            margin-top: 10px;
+            font-size: 18px;
+        }
+    
+        .additional-info {
+            color: #666666;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+    
+        .reset-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    
+        .reset-button:hover {
+            background-color: #45a049;
+        }
+    
+        .reset-button:active {
+            background-color: #3e8e41;
+        }
+    
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+    
+        .printer-list {
+            padding: 10px;
+            border: 2px solid #cccccc;
+            background-color: #ffffff;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+        }
+    
+        .printer-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 2px solid #eaeaea;
+            background-color: #f9f9f9;
+        }
+    
+        .inactive-printers {
+            margin-top: 20px;
+            color: #666666;
+            font-size: 18px;
+        }
+    </style>
+<body>
+    <h2>Zarządzanie kołem druku 3D</h2>
+    <a href="{{ url_for('change_time') }}" class="reset-button">Zacznij nowy druk!</a>
+    <br><br>
+    <div class="printer-list">
+        {% for progress_bar in progress_bars %}
+        <div class="printer-item">
+            <p class="progress-bar-id">Drukarka: ID: {{ progress_bar.printerID }}</p>
+            <div class="progress-bar">
+                <div class="progress-bar-inner" id="progress-bar-inner-{{ progress_bar.printerID }}"></div>
+            </div>
+            <p class="additional-info" id="additional-info-{{ progress_bar.printerID }}">{{progress_bar.additional_info}}</p>
+            <p class="progress-bar-id">Used filament: {{progress_bar.filamentID}}, {{progress_bar.materialAmount}} [g]</p>
+            <p class="progress-bar-id">Author: {{progress_bar.username}}</p>
+	    {% if progress_bar.printerID == "Ender3_1" %}
+            	<p class="progress-bar-id" id="data{{ progress_bar.printerID}}">temp: {{progress_bar.temperature}}, humid: {{progress_bar.humidity}}</p>
+	    {% endif %}
+	    <button class="reset-button" data-printer-id="{{ progress_bar.printerID }}">Zakończ druk!</button>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="inactive-printers">
+        <h2>Wolne drukarki:</h2>
+        {% for inactive_printer in inactive %}
+            <p class="progress-bar-id">Drukarka: ID: {{ inactive_printer.printerID }}</p>
+        {% endfor %}
+    </div>
+
+    <script>
+        const resetButtons = document.querySelectorAll('.reset-button');
+        resetButtons.forEach(button => {
+            button.addEventListener('click', handleResetClick);
+        });
+
+        function handleResetClick(event) {
+            const printerID = event.target.dataset.printerId;
+            window.location.href = `/reset_printer?printer_id=${printerID}`;
+        }
+
+        function updateProgressBars(progressBars) {
+            progressBars.forEach(progressBar => {
+                if (progressBar.printingState !== 0) {
+                    var progressBarInner = document.getElementById('progress-bar-inner-' + progressBar.printerID);
+                    progressBarInner.style.width = progressBar.progress + '%';
+
+                    var additionalInfoElement = document.getElementById('additional-info-' + progressBar.printerID);
+                    additionalInfoElement.textContent = progressBar.additional_info;
+
+                    if (progressBar.printerID == 'Ender3_1'){
+                        var temp = document.getElementById('data' + progressBar.printerID);
+                        temp.textContent = 'temp: ' + progressBar.temperature + ', humid: ' + progressBar.humidity
+                    }
+                }
+            });
+        }
+
+        function fetchProgress() {
+            setInterval(() => {
+                fetch('/progress')
+                    .then(response => response.json())
+                    .then(data => {
+                        updateProgressBars(data.progress_bars);
+                    })
+                    .catch(error => {
+                        console.log('Error fetching progress:', error);
+                    });
+            }, 3000);
+        }
+
+        fetchProgress();
+    </script>
+</body>
+</html>

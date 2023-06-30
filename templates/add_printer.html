@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Printer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f2f2f2;
+        }
+    
+        h1 {
+            color: #333333;
+            font-size: 28px;
+        }
+    
+        form {
+            margin-top: 20px;
+        }
+    
+        label {
+            color: #333333;
+            font-size: 16px;
+            display: block;
+            margin-bottom: 10px;
+        }
+    
+        input[type="text"] {
+            width: 300px;
+            height: 25px;
+            font-size: 14px;
+        }
+    
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+    
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    
+        input[type="submit"]:active {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <h1>Add a new printer:</h1>
+    <form method="POST" action="/add_printer">
+        <label for="model">Model:</label>
+        <input type="text" id="model" name="model"><br><br>
+        
+        <label for="manufacturer">Manufacturer:</label>
+        <input type="text" id="manufacturer" name="manufacturer"><br><br>
+        
+        <label for="type">Type:</label>
+        <input type="text" id="type" name="type"><br><br>
+        
+        <label for="state">State:</label>
+        <input type="text" id="state" name="state"><br><br>
+        
+        <input type="submit" value="Add Printer">
+    </form>
+</body>
+</html>

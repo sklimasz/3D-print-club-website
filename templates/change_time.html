@@ -1,0 +1,88 @@
+<!-- change_time.html -->
+<!DOCTYPE html>
+<html>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f2f2f2;
+        }
+    
+        h1 {
+            color: #333333;
+            font-size: 24px;
+        }
+    
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    
+        input[type="text"],
+        select {
+            padding: 6px 12px;
+            font-size: 14px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+        }
+    
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    
+        button:hover {
+            background-color: #45a049;
+        }
+    
+        button:active {
+            background-color: #3e8e41;
+        }
+    </style>
+<head>
+    <title>Change Progress Bar Time</title>
+</head>
+<body>
+    <h1>Change Progress Bar Time</h1>
+    <form action="/change_time" method="POST">
+        <label for="progress-bar-id">Progress Bar ID:</label>
+        <select id="progress-bar-id" name="progress_bar_id">
+            {% for progress_bar in progress_bars %}
+            <option value="{{ progress_bar.printerID }}">{{ progress_bar.printerID }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <label for="filament-id">Filament ID:</label>
+        <select id="filament-id" name="filament-id">
+            {% for filament in filaments %}
+            <option value="{{ filament }}">{{ filament }}</option>
+            {% endfor %}
+        </select>
+        <br></br>
+        <label for ="material-amount">Material amount [g]:</label>
+        <input type="number" id="material-amount" name="material-amount">
+        <br><br>
+        <label for ="usernamet">Username</label>
+        <input type="text" id="username" name="username">
+        <br><br>
+        <label for="start-time">Start Time:</label>
+        <input type="datetime-local" id="start-time" name="start_time" value="{{ current_time }}">
+        <br><br>
+        <label for="finish-time">Finish Time:</label>
+        <input type="datetime-local" id="finish-time" name="finish_time">
+        <br><br>
+        <input type="submit" value="Update Time">
+    </form>
+</body>
+</html>

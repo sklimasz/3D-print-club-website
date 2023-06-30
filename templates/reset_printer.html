@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f2f2f2;
+        }
+    
+        h1 {
+            color: #333333;
+            font-size: 24px;
+        }
+    
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    
+        input[type="text"],
+        select {
+            padding: 6px 12px;
+            font-size: 14px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+        }
+    
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    
+        button:hover {
+            background-color: #45a049;
+        }
+    
+        button:active {
+            background-color: #3e8e41;
+        }
+        .progress-bar-id {
+            font-weight: bold;
+            color: #333333;
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        .checkbox-container label {
+            margin-right: 10px;
+        }
+    </style>
+<head>
+    <title>Reset Printer</title>
+</head>
+<body>
+    <h1>Reset Printer</h1>
+    <p class="progress-bar-id">Printer ID: {{ printer_id }}</p>
+    <form method="POST" action="/reset_printer">
+        <input type="hidden" name="printer_id" value="{{ printer_id }}">
+        <label for="materialAmount">The amount of filament used [g]:</label>
+        <input type="number" id="materialAmount" name="materialAmount" value = {{progress_bar.materialAmount}} required>
+        
+        <br><br>
+        <label for="myCheckbox"><span>Was the print succesful?</span></label>
+        <input type="checkbox" id="myCheckbox" name="myCheckbox" checked>
+        <br><br>
+
+        <button type="submit">Reset Printer</button>
+    </form>
+</body>
+</html>
